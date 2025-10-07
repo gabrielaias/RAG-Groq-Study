@@ -1,0 +1,11 @@
+langchain-core
+langchain
+langchain-community
+langchain-groq
+langchain-huggingface
+langgraph
+pypdf
+python-dotenv
+sentence-transformers
+ipython
+ipywidgets

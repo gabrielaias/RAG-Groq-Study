@@ -1,6 +1,6 @@
 # 🧠 Estudo de RAG com Agente ReAct, LangGraph e Groq
 
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python)
+![Python](https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge&logo=python)
 ![LangChain](https://img.shields.io/badge/LangChain-Framework-green?style=for-the-badge)
 ![Groq](https://img.shields.io/badge/Groq-LPU%20Inference-orange?style=for-the-badge)
 
@@ -14,19 +14,19 @@ A demonstração é feita em um Jupyter Notebook (`RAG_Study.ipynb`) onde o agen
 
 ## ✨ Funcionalidades Principais
 
-- **Múltiplas Fontes de Conhecimento**: Carregamento e vetorização de múltiplos documentos PDF.
+- **Múltiplas Fontes de Conhecimento**: Carregamento e vetorização de múltiplos documentos PDF a partir de URLs.
 - **Agente Inteligente (ReAct)**: Um agente que raciocina e escolhe a melhor "ferramenta" (base de dados) para cada pergunta.
-- **Orquestração com LangGraph**: Um grafo de estados gerencia o ciclo de vida do agente: pergunta -> pensamento -> ferramenta -> resposta.
+- **Orquestração com LangGraph**: Um grafo de estados gerencia o ciclo de vida do agente e sua memória de conversação.
 - **Embeddings de Alta Performance**: Uso do modelo `mxbai-embed-large-v1` da HuggingFace para criar embeddings de qualidade.
 - **Inferência Ultra-Rápida**: Respostas geradas em tempo real graças à API da Groq.
 
 ## 🛠️ Tecnologias Utilizadas
 
-* **Linguagem**: Python 3.10+
+* **Linguagem**: Python 3.11+
 * **Orquestração de IA**: LangChain, LangGraph
 * **Modelo de Linguagem (LLM)**: Llama 3 (via API Groq)
 * **Vetorização (Embeddings)**: LangChain HuggingFace (`mxbai-embed-large-v1`)
-* **Manipulação de Dados**: PyPDF
+* **Bibliotecas de Apoio**: PyPDF, python-dotenv, ipywidgets
 * **Ambiente**: Gerenciado com `uv`
 
 ## 🚀 Como Executar o Projeto
@@ -35,8 +35,9 @@ Siga os passos abaixo para configurar e executar o projeto em seu ambiente local
 
 **1. Clone o Repositório**
 ```bash
-git clone [https://github.com/](https://github.com/)[SEU-USUARIO]/[NOME-DO-REPOSITORIO].git
-cd [NOME-DO-REPOSITORIO]
+# Lembre-se de substituir pela URL do seu repositório!
+git clone [https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git](https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git)
+cd SEU-REPOSITORIO
 ```
 
 **2. Crie e Ative o Ambiente Virtual com `uv`**
@@ -64,31 +65,35 @@ uv pip install -r requirements.txt
      ```
 
 **5. Execute o Jupyter Notebook**
-   - Inicie o Jupyter Lab ou Notebook:
+   - Inicie o Jupyter Lab:
      ```bash
      jupyter lab
      ```
-   - Abra o arquivo `RAG_Study.ipynb` e execute as células.
+   - Abra o arquivo `RAG_Study.ipynb` e execute as células em ordem.
 
 ## 📖 Estrutura do Notebook
 
-O notebook `RAG_Study.ipynb` está dividido nas seguintes seções:
+O notebook `RAG_Study (1).ipynb` foi refatorado e agora segue uma estrutura limpa e organizada:
 
-1.  **Instalação de Dependências**: Comandos `pip` para instalar as bibliotecas.
-2.  **Configuração da API**: Carregamento da chave da Groq a partir do arquivo `.env`.
-3.  **Construção da Base de Conhecimento (RAG)**:
-    - Carregamento de um PDF de exemplo (da NASA).
-    - Criação de um `retriever` para buscar informações no documento.
-    - Teste da cadeia RAG simples.
-4.  **Criação de Ferramentas (Tools)**:
-    - Generalização do processo para carregar múltiplos PDFs (Dengue, Agricultura).
-    - Definição de `tools`, onde cada uma é um `retriever` para uma base de conhecimento específica.
-5.  **Criação do Agente com LangGraph**:
-    - Definição do `system_prompt` que instrui o agente a como escolher as ferramentas.
-    - Construção do grafo que define a lógica de execução (agente -> ferramenta -> agente).
-6.  **Execução e Testes**:
-    - Demonstração do uso do agente com perguntas sobre diferentes tópicos.
-    - Inclusão de memória para que o agente se lembre do histórico da conversa.
+1.  **Setup e Configurações Iniciais**:
+    * Carregamento seguro da chave de API do arquivo `.env`.
+    * Centralização de todas as importações de bibliotecas.
+    * Inicialização dos modelos globais (LLM da Groq e modelo de Embeddings da Hugging Face).
+
+2.  **Funções de Apoio e Criação das Bases de Conhecimento**:
+    * Definição de uma função auxiliar (`carrega_pdf`) para baixar e vetorizar documentos de forma reutilizável.
+    * Criação das três bases de conhecimento (`vector_store_nasa`, `vector_store_agriculture`, `vector_store_dengue`) usando a função auxiliar.
+
+3.  **Definição das Ferramentas do Agente**:
+    * Cada base de conhecimento é encapsulada em uma função e marcada com o decorador `@tool`. Isso as expõe como "ferramentas" que o agente pode escolher usar.
+
+4.  **Construção do Agente com LangGraph**:
+    * Definição do `system_prompt` que instrui o agente sobre seu comportamento e sobre como usar as ferramentas.
+    * Criação do agente ReAct e compilação do grafo que gerencia a lógica de execução e a memória.
+
+5.  **Interagindo com o Agente**:
+    * Definição de uma função de chat (`chat_com_agente`) para facilitar a comunicação com o agente, gerenciando o histórico da conversa.
+    * Células de exemplo que testam a capacidade do agente de escolher a ferramenta correta e manter o contexto em uma conversa.
 
 ## Agradecimentos
 
